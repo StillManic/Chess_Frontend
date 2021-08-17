@@ -1,10 +1,10 @@
 .space {
     background-color: hotpink;
     display: inline-block;
-    transform: scale(25%);
+    transform: scale(100%);
     height: 112px;
     /* width: 1000px; */
-    border: 1px solid #27802B;
+    
 }
 
 img {
@@ -15,12 +15,12 @@ img {
     display: block;
     /* width: 8%; */
     /* margin-top: -4px; */
-    background-color: lightblue;
+    
     z-index: -100;
 }
 
 .piece {
-    background-color: greenyellow;
+    
     position: absolute;
     /* width: 5%; */
     transform: translate(90px, -400px);
