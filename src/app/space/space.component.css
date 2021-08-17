@@ -1,0 +1,36 @@
+.space {
+    background-color: hotpink;
+    display: inline-block;
+    transform: scale(25%);
+    height: 112px;
+    /* width: 1000px; */
+    border: 1px solid #27802B;
+}
+
+img {
+    display: inline;
+}
+
+.background {
+    display: block;
+    /* width: 8%; */
+    /* margin-top: -4px; */
+    background-color: lightblue;
+    z-index: -100;
+}
+
+.piece {
+    background-color: greenyellow;
+    position: absolute;
+    /* width: 5%; */
+    transform: translate(90px, -400px);
+    /* margin-left: -70px; */
+    /* margin-bottom: 10px; */
+    z-index: 100;
+}
+
+/* @media only screen and (max-width: 768px) {
+    .space {
+        height: 37.25px;
+    }
+} */

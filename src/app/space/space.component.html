@@ -1,0 +1,8 @@
+<div class="space float-left">
+    <div class="background">
+        <img src="{{ space.background }}" alt="space">
+    </div>
+    <div class="piece">
+        <img *ngIf="space.piece" src="{{ space.piece.sprite }}" alt="piece">
+    </div>
+</div>

@@ -1,0 +1,8 @@
+.board {
+    position: absolute;
+    scale: 50%;
+}
+
+.row {
+    transform: scale(50%);
+}
