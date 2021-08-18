@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PieceComponent } from '../piece/piece.component';
+import { SelectMultipleControlValueAccessor } from '@angular/forms';
+import { Color, PieceComponent, Type } from '../piece/piece.component';
 
 export class Space {
   private _background: string = '../assets/images/square_';
@@ -13,6 +14,12 @@ export class Space {
     if (piece) {
       this.piece = piece;
     }
+  }
+
+  setPiece(type: Type, color: Color): void {
+    this.piece = new PieceComponent();
+    this.piece.type = type;
+    this.piece.color = color;
   }
 
   public get background() {
