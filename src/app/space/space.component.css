@@ -15,7 +15,7 @@ img {
 
 .piece {
     position: absolute;
-    /* width: 5%; */
-    transform: translate(90px, -400px);
+    /* background-color: greenyellow; */
+    transform: translate(-15px, -475px);
     z-index: 100;
 }
