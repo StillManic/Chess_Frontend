@@ -12,8 +12,36 @@
 .box {
     background-color: #d9d9d9;
     border: 2px solid black;
-   }
+}
 
 .row {
     transform: scale(26%);
+}
+
+.btn {
+    border: none;
+    border-radius: 6px;
+    padding: 1%;
+    color: #fff;
+    margin-left: 3px;
+
+    /* -moz-box-shadow:    1px 1px 3px 3px #ccc;
+    -webkit-box-shadow: 1px 1px 3px 3px #ccc;
+    box-shadow:         1px 1px 3px 3px #ccc; */
+}
+
+/* .btn:hover {
+    filter: brightness(0.90);
+} */
+
+/* .btn:active {
+    filter: brightness(0.75);
+} */
+
+.btn-primary {
+    background-color: #0059ff;
+}
+
+.btn-primary:active {
+    background-color: #003daf;
 }

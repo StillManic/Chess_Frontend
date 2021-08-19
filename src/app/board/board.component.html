@@ -1,5 +1,9 @@
 <div class="board">
     <div *ngFor="let row of spaces" class="row">
-        <app-space *ngFor="let space of row" [space]=space></app-space>
+        <app-space *ngFor="let space of row" [space]=space (click)="spaceClicked(space)"></app-space>
+    </div>
+    <div>
     </div>
 </div>
+<input type="button" class="btn btn-primary" value="Reset Board" (click)=initializeBoard()>
+<input type="button" class="btn btn-primary" value="Change Color" (click)=changeBoardColor()>
