@@ -1,7 +1,7 @@
 import { preserveWhitespacesDefault } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
 import { Color, MoveOffset, PieceComponent, Type } from '../piece/piece.component';
-import { Space, SpaceComponent } from '../space/space.component';
+import { Space, SpaceComponent, Status } from '../space/space.component';
 
 @Component({
   selector: 'app-board',
@@ -15,51 +15,73 @@ export class BoardComponent implements OnInit {
   private selectedSpace!: Space | null;
   private prevSelectedSpace!: Space | null;
 
+  capturedPieces: PieceComponent[] = [];
+
   constructor() {
     this.initializeBoard();
   }
 
   ngOnInit(): void {}
 
+  shouldToggleHighlighters(space: Space): boolean {
+    if (this.selectedSpace && this.selectedSpace.piece) {
+      if (space && space.piece) {
+        return space.piece != this.selectedSpace.piece;
+      }
+    }
+    return true;
+  }
+
   spaceClicked(space: Space): void {
-    if (space.piece) {      // if clicked square contains a piece
-      space.selected = !space.selected;
-      this.selectedSpace = space.selected ? space : null;
+    // TODO: this doesn't work when capturing a piece!!!
+    if (space.piece) {
+      // Toggle highlighters
+      space.toggleSelected();
+      this.selectedSpace = space.status == Status.selected ? space : null;
       if (this.prevSelectedSpace && this.prevSelectedSpace != this.selectedSpace) {
-        this.prevSelectedSpace.selected = false;
+        this.prevSelectedSpace.status = Status.off;
         let [destinations, attacks] = this.getDestinations(this.prevSelectedSpace);
-        for (let dest of destinations) dest.valid = false;
-        for (let attack of attacks) attack.attacked = false;
+        destinations.forEach(dest => dest.status = Status.valid);
+        attacks.forEach(att => att.status = Status.attacked);
+        this.prevSelectedSpace = null;
       }
       let [destinations, attacks] = this.getDestinations(space);
-      for (let dest of destinations) {
-        dest.valid = !dest.valid;
-      }
-      for (let attack of attacks) {
-        attack.attacked = !attack.attacked;
-      }
+      destinations.forEach(dest => dest.toggleValidity());
+      attacks.forEach(att => att.toggleAttacked());
       this.prevSelectedSpace = this.selectedSpace;
     } else {
-      if (this.selectedSpace && this.selectedSpace.piece && this.selectedSpace != space && space.valid) {
+      // Move piece, space is the space we are moving to
+      if (this.selectedSpace && this.selectedSpace.piece && this.selectedSpace != space) {
         let [destinations, attacks] = this.getDestinations(this.selectedSpace!);
-        for (let dest of destinations) {
-          dest.valid = false;
-          dest.selected = false;
-          dest.attacked = false;
+
+        if (space.status == Status.valid) {
+          space.piece = this.selectedSpace.piece;
+          this.selectedSpace.piece = null;
+          this.selectedSpace.status = Status.off;
         }
-        for (let attack of attacks) {
-          attack.valid = false;
-          attack.selected = false;
-          attack.attacked = false;
+
+        if (space.piece && space.status == Status.attacked) {
+          this.capturedPieces.push(space.piece);
+          space.piece = this.selectedSpace.piece;
+          this.selectedSpace.piece = null;
+          this.selectedSpace.status = Status.off;
         }
-        space.piece = this.selectedSpace.piece;
-        this.selectedSpace.piece = null;
-        this.selectedSpace.selected = false;
+
+        destinations.forEach(dest => dest.status = Status.off);
+        attacks.forEach(att => att.status = Status.off);
       }
+      // if (this.selectedSpace && this.selectedSpace.piece && this.selectedSpace != space && space.status == Status.valid) {
+      //   let [destinations, attacks] = this.getDestinations(this.selectedSpace!);
+      //   destinations.forEach(dest => dest.status = Status.off);
+      //   attacks.forEach(att => att.status = Status.off);
+      //   space.piece = this.selectedSpace.piece;
+      //   this.selectedSpace.piece = null;
+      //   this.selectedSpace.status = Status.off;
+      // }
     }
   }
 
-  private getDestinations(space: Space): [Space[], Space[]] {     // returns: 0 = destinations, 1 = attacks
+  private getDestinations(space: Space): [Space[], Space[]] {     // returns: [destinations, attacks]
     let destinations: Space[] = new Array();
     let attacks: Space[] = new Array();
 
@@ -103,9 +125,20 @@ export class BoardComponent implements OnInit {
     else return true;
   }
 
+  getTestPiece(): PieceComponent {
+    let piece: PieceComponent = new PieceComponent();
+    piece.type = Type.bishop;
+    piece.color = Color.black;
+    piece.moveOffsets = [];
+    piece.movesRepeat = false;
+    return piece;
+  }
+
   initializeBoard(): void {
     let playerColor = this.playerIsWhite ? Color.white : Color.black;
     let cpuColor = this.playerIsWhite ? Color.black : Color.white;
+    this.capturedPieces = [];
+
     for (let col = 0; col < 8; col++) {
       this.spaces[col] = new Array();
       for (let row = 0; row < 8; row++) {

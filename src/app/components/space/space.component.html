@@ -1,15 +1,15 @@
 <!-- <div class="space float-left board-boundary"> -->
 <div class="space float-left">
-    <div *ngIf="!selected && !attacked && !valid" class="background">
+    <div *ngIf="space.status == 'off'" class="background">
         <img src="{{ space.background }}" alt="space">
     </div>
-    <div *ngIf="selected" class="highlight">
+    <div *ngIf="space.status == 'selected'" class="highlight">
         <img src="{{ selectedHighlight }}" alt="">
     </div>
-    <div *ngIf="attacked" class="highlight">
+    <div *ngIf="space.status == 'attacked'" class="highlight">
         <img src="{{ attackedHighlight }}" alt="">
     </div>
-    <div *ngIf="valid" class="highlight">
+    <div *ngIf="space.status == 'valid'" class="highlight">
         <img src="{{ validHighlight }}" alt="">
     </div>
     <!-- <div class="piece" cdkDragBoundary=".board-boundary" cdkDrag> -->

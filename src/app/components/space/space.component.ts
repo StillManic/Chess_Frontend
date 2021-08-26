@@ -2,6 +2,13 @@ import { Component, Input, OnInit } from '@angular/core';
 import { SelectMultipleControlValueAccessor } from '@angular/forms';
 import { Color, MoveOffset, PieceComponent, Type } from '../piece/piece.component';
 
+export enum Status {
+  selected = 'selected',
+  attacked = 'attacked',
+  valid = 'valid',
+  off = 'off'
+}
+
 export class Space {
   private _background: string = '../assets/images/square_';
   brown: boolean = true;
@@ -10,10 +17,7 @@ export class Space {
   public col: number = -1;
   public piece!: PieceComponent | null;
 
-  // TODO: change these to a single enum so that it is impossible to have a space be in two states at once!!!
-  selected: boolean = false;
-  attacked: boolean = false;
-  valid: boolean = false;
+  status: Status = Status.off;
 
   constructor(dark: boolean, brown: boolean, piece?: PieceComponent) {
     this.dark = dark;
@@ -23,16 +27,31 @@ export class Space {
     }
   }
 
+  public get background() {
+    return this._background + (this.brown ? 'brown_' : 'grey_') + (this.dark ? 'dark' : 'light') + '.png';
+  }
+
+  toggleValidity() {
+    if (this.status == Status.off) this.status = Status.valid;
+    else if (this.status == Status.valid) this.status = Status.off;
+  }
+  
+  toggleSelected() {
+    if (this.status == Status.off) this.status = Status.selected;
+    else if (this.status == Status.selected) this.status = Status.off;
+  }
+
+  toggleAttacked() {
+    if (this.status == Status.off) this.status = Status.attacked;
+    else if (this.status == Status.attacked) this.status = Status.off;
+  }
+
   setPiece(type: Type, color: Color, moves: MoveOffset[], repeating: boolean): void {
     this.piece = new PieceComponent();
     this.piece.type = type;
     this.piece.color = color;
     this.piece.moveOffsets = moves;
     this.piece.movesRepeat = repeating;
-  }
-
-  public get background() {
-    return this._background + (this.brown ? 'brown_' : 'grey_') + (this.dark ? 'dark' : 'light') + '.png';
   }
 
   setLocation(row: number, col: number) {
@@ -53,28 +72,12 @@ export class SpaceComponent implements OnInit {
   attackedHighlight: string = '../assets/images/square_attacking.png';
   validHighlight: string = '../assets/images/square_valid.png';
   
-  public set selected(selected: boolean) {
-    this.space.selected = selected;
+  public set status(status: Status) {
+    this.space.status = status;
   }
 
-  public get selected() {
-    return this.space.selected;
-  }
-
-  public set attacked(attacked: boolean) {
-    this.space.attacked = attacked;
-  }
-
-  public get attacked() {
-    return this.space.attacked;
-  }
-
-  public set valid(valid: boolean) {
-    this.space.valid = valid;
-  }
-
-  public get valid() {
-    return this.space.valid;
+  public get status() {
+    return this.space.status;
   }
 
   constructor() {}

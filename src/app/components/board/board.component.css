@@ -1,12 +1,17 @@
 .board {
     position: absolute;
-    transform: scale(70%) translateY(-200px);
+    transform: scale(70%) translateY(-100px);
     
     display: grid;
     grid-template-columns:  120px 120px 120px 120px 120px 120px 120px 120px; 
     grid-template-rows:  120px 120px 120px 120px 120px 120px 120px 120px;
     
     justify-content: center;
+}
+
+.captured {
+    position: absolute;
+    transform: translateX(1000px) translateY(40px);
 }
 
 .box {
